@@ -1,0 +1,10 @@
+# Typescript
+
+node_modules/
+
+npm-debug.log*
+*.tsbuildinfo
+.cache/
+.env.local
+coverage/
+.env

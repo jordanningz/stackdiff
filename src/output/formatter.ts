@@ -47,3 +47,18 @@ export function formatOutput(entries: DiffEntry[], format: OutputFormat, env?: '
     case 'dotenv': return formatDotenv(entries, env ?? 'staging');
   }
 }
+
+/**
+ * Returns a summary line describing the diff results, e.g.:
+ * "3 added, 1 removed, 2 changed, 10 unchanged"
+ */
+export function formatSummary(entries: DiffEntry[]): string {
+  const counts = { added: 0, removed: 0, changed: 0, unchanged: 0 };
+  for (const entry of entries) {
+    counts[entry.status]++;
+  }
+  return (Object.entries(counts) as [keyof typeof counts, number][])
+    .filter(([, count]) => count > 0)
+    .map(([status, count]) => `${count} ${status}`)
+    .join(', ');
+}

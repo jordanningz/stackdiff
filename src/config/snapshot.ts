@@ -21,9 +21,28 @@ export function saveSnapshot(label: string, config: EnvConfig, dir: string): str
 }
 
 export function loadSnapshot(filepath: string): Snapshot {
-  const raw = fs.readFileSync(filepath, 'utf-8');
-  const parsed = JSON.parse(raw);
-  if (!parsed.timestamp || !parsed.label || !parsed.config) {
+  if (!fs.existsSync(filepath)) {
+    throw new Error(`Snapshot file not found: ${filepath}`);
+  }
+  let raw: string;
+  try {
+    raw = fs.readFileSync(filepath, 'utf-8');
+  } catch (err) {
+    throw new Error(`Failed to read snapshot file: ${filepath}: ${(err as Error).message}`);
+  }
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(raw);
+  } catch {
+    throw new Error(`Snapshot file contains invalid JSON: ${filepath}`);
+  }
+  if (
+    typeof parsed !== 'object' ||
+    parsed === null ||
+    !(parsed as Record<string, unknown>).timestamp ||
+    !(parsed as Record<string, unknown>).label ||
+    !(parsed as Record<string, unknown>).config
+  ) {
     throw new Error(`Invalid snapshot file: ${filepath}`);
   }
   return parsed as Snapshot;

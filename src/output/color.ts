@@ -37,3 +37,27 @@ export function applyColors(tableOutput: string, entries: DiffEntry[]): string {
 
   return [...header, ...coloredData].join('\n');
 }
+
+/**
+ * Returns a summary string with counts of each diff status, colorized.
+ * Example: "2 added, 1 removed, 3 changed, 5 unchanged"
+ */
+export function colorizedSummary(entries: DiffEntry[]): string {
+  const counts: Record<DiffEntry['status'], number> = {
+    added: 0,
+    removed: 0,
+    changed: 0,
+    unchanged: 0,
+  };
+
+  for (const entry of entries) {
+    counts[entry.status]++;
+  }
+
+  return [
+    green(`${counts.added} added`),
+    red(`${counts.removed} removed`),
+    yellow(`${counts.changed} changed`),
+    dim(`${counts.unchanged} unchanged`),
+  ].join(', ');
+}

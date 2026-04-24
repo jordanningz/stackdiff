@@ -50,3 +50,23 @@ export function filterDiff(
 ): DiffEntry[] {
   return entries.filter((e) => statuses.includes(e.status));
 }
+
+/**
+ * Returns a summary count of diff entries grouped by status.
+ */
+export function summarizeDiff(
+  entries: DiffEntry[]
+): Record<DiffStatus, number> {
+  const summary: Record<DiffStatus, number> = {
+    added: 0,
+    removed: 0,
+    changed: 0,
+    unchanged: 0,
+  };
+
+  for (const entry of entries) {
+    summary[entry.status]++;
+  }
+
+  return summary;
+}

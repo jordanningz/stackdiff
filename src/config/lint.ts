@@ -93,3 +93,11 @@ export function lintBothConfigs(
     production: lintConfig(production, extraRules),
   };
 }
+
+/**
+ * Returns true if the lint result contains no errors.
+ * Useful for CI gates where only errors should block a build.
+ */
+export function isLintClean(result: LintResult): boolean {
+  return result.errorCount === 0;
+}

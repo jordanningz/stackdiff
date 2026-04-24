@@ -42,6 +42,12 @@ describe('freezeConfig', () => {
     expect(result.frozenKeys).toEqual([]);
     expect(result.skippedKeys).toEqual([]);
   });
+
+  it('ignores keys not present in config when keys option is provided', () => {
+    const result = freezeConfig(config, { keys: ['API_URL', 'NONEXISTENT_KEY'] });
+    expect(result.frozenKeys).toEqual(['API_URL']);
+    expect(result.skippedKeys).toEqual(['DB_HOST', 'PORT']);
+  });
 });
 
 describe('freezeBothConfigs', () => {
@@ -77,14 +83,20 @@ describe('loadFreezeOptionsFromEnv', () => {
   });
 
   it('parses STACKDIFF_FREEZE_PATTERN', () => {
-    process.env.STACKDIFF_FREEZE_PATTERN = '^DB_';
+    process.env.STACKDIFF_FREEZE_PATTERN = '^API_';
     const opts = loadFreezeOptionsFromEnv();
-    expect(opts.pattern).toEqual(/^DB_/);
+    expect(opts.pattern).toEqual(/^API_/);
   });
 
-  it('parses STACKDIFF_FREEZE_INVERT', () => {
+  it('parses STACKDIFF_FREEZE_INVERT as true', () => {
     process.env.STACKDIFF_FREEZE_INVERT = 'true';
     const opts = loadFreezeOptionsFromEnv();
     expect(opts.invertMatch).toBe(true);
+  });
+
+  it('parses STACKDIFF_FREEZE_INVERT as false when set to other value', () => {
+    process.env.STACKDIFF_FREEZE_INVERT = 'false';
+    const opts = loadFreezeOptionsFromEnv();
+    expect(opts.invertMatch).toBe(false);
   });
 });

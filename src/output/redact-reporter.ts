@@ -1,5 +1,5 @@
 import { RedactResult } from '../config/redact';
-import { dim, yellow, green, bold } from './color';
+import { dim, yellow, green, bold, red } from './color';
 
 export function reportRedactResult(
   label: string,
@@ -40,5 +40,5 @@ export function reportRedactSummary(
 }
 
 export function reportRedactError(message: string): void {
-  console.error(yellow(`redact: ${message}`));
+  console.error(red(`✖ redact error: ${message}`));
 }

@@ -29,6 +29,10 @@ export function reportSplitResult(
   }
 }
 
+/**
+ * Reports a summary of split results for both staging and production environments,
+ * including the number of keys split, total parts, and any skipped keys.
+ */
 export function reportSplitSummary(
   staging: SplitConfigResult,
   production: SplitConfigResult

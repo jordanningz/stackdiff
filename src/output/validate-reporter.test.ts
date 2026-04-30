@@ -40,4 +40,9 @@ describe("reportValidation", () => {
     expect(output).not.toContain("Validation failed");
     expect(output).toContain("Empty value for key: OPTIONAL");
   });
+
+  it("does not show warnings block when there are no warnings", () => {
+    const output = reportValidation("staging", passing);
+    expect(output).not.toContain("Warning");
+  });
 });
